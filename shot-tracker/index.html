@@ -50,22 +50,35 @@ h1{font-size:32px;font-weight:700;letter-spacing:.01em}
 h2{font-size:22px;font-weight:700}
 h3{font-size:13px;font-family:var(--body);font-weight:600;letter-spacing:.09em;text-transform:uppercase;color:var(--muted)}
 
+/* App frame: fills the screen; only the content area scrolls, and Track never does */
+html{height:100%;background:var(--band)}
+body{height:100%;overflow:hidden}
+#app{height:100%;display:flex;flex-direction:column;background:var(--bg)}
+
 /* Band */
-.band{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--band);color:var(--band-ink);border-bottom:4px solid var(--gold)}
-.band-in{display:flex;align-items:center;gap:8px 18px;flex-wrap:wrap;padding-block:8px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));max-width:1400px;margin:0 auto}
-.brand{display:flex;align-items:baseline;gap:10px;white-space:nowrap}
-.brand b{font:800 27px/1 var(--display);letter-spacing:.07em;color:var(--gold)}
-.brand span{font:600 14px var(--display);letter-spacing:.16em;text-transform:uppercase;opacity:.85}
-.tabs{display:flex;gap:2px;flex-wrap:wrap}
-.tab{background:transparent;border:0;color:var(--band-ink);font-weight:600;font-size:15px;padding:9px 12px;border-radius:8px;opacity:.78}
+.band{flex:none;position:relative;z-index:5;background:var(--band);color:var(--band-ink);border-bottom:3px solid var(--gold)}
+.band-in{display:flex;align-items:center;gap:8px 18px;padding-block:7px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));max-width:1400px;margin:0 auto}
+.brand{display:flex;align-items:baseline;gap:9px;white-space:nowrap}
+.brand b{font:800 25px/1 var(--display);letter-spacing:.07em;color:var(--gold)}
+.brand span{font:600 13px var(--display);letter-spacing:.16em;text-transform:uppercase;opacity:.85}
+.tabs{display:flex;gap:2px}
+.tab{background:transparent;border:0;color:var(--band-ink);font-weight:600;font-size:15px;padding:8px 12px;border-radius:8px;opacity:.78}
 .tab[aria-current="page"]{opacity:1;background:rgba(255,255,255,.1);box-shadow:inset 0 -3px 0 var(--gold)}
 .sync{margin-left:auto;display:flex;align-items:center;gap:7px;font-size:13px;opacity:.92;white-space:nowrap}
 .sync i{width:9px;height:9px;border-radius:50%;background:#7AD497;flex:none}
 .sync[data-s="saving"] i{background:var(--gold)}
 .sync[data-s="retry"] i,.sync[data-s="loading"] i{background:#F28B6E}
 .sync[data-s="local"] i{background:#B9C3D6}
+.tabbar{flex:none;display:none;background:var(--band);border-top:3px solid var(--gold);padding-left:env(safe-area-inset-left,0px);padding-right:env(safe-area-inset-right,0px)}
+.tabbar button{flex:1;min-height:52px;background:transparent;border:0;color:#fff;opacity:.7;font-weight:600;font-size:14px;letter-spacing:.02em}
+.tabbar button[aria-current="page"]{opacity:1;color:var(--gold);box-shadow:inset 0 3px 0 var(--gold)}
+@media (max-width:699px){.tabs{display:none}.tabbar{display:flex}.brand b{font-size:22px}}
+@media (max-width:459px){.brand span{display:none}}
+.band-in{overflow:hidden}.sync{min-width:0}.sync span{overflow:hidden;text-overflow:ellipsis}
 
-main{max-width:1400px;margin:0 auto;padding-block:14px 48px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+main{flex:1;min-height:0;overflow:auto;-webkit-overflow-scrolling:touch;width:100%;max-width:1400px;margin:0 auto;padding-block:14px 32px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+main.on-track{overflow:hidden;padding-block:8px}
+@media (max-width:699px){main.on-track{padding-left:max(10px,env(safe-area-inset-left,0px));padding-right:max(10px,env(safe-area-inset-right,0px))}}
 
 /* Generic */
 .card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px;min-width:0}
@@ -82,41 +95,69 @@ main{max-width:1400px;margin:0 auto;padding-block:14px 48px;padding-left:max(16p
 .pill{display:inline-flex;align-items:center;height:22px;padding:0 8px;border-radius:999px;font-size:12px;font-weight:600;background:var(--surface-2);color:var(--muted)}
 .pill.live{background:color-mix(in srgb,var(--make) 18%,transparent);color:var(--make)}
 label.f{display:flex;flex-direction:column;gap:5px;font-size:13px;font-weight:600;color:var(--muted);min-width:0}
-input[type=text],input[type=date],input[type=email],input[type=password],select{min-height:44px;border:1.5px solid var(--line);border-radius:10px;background:var(--surface);padding:0 12px;font-size:16px;color:var(--ink);width:100%}
+input[type=text],input[type=date],input[type=email],input[type=password],input[type=number],select{min-height:44px;border:1.5px solid var(--line);border-radius:10px;background:var(--surface);padding:0 12px;font-size:16px;color:var(--ink);width:100%}
 .empty{padding:28px 20px;text-align:center;color:var(--muted);border:1.5px dashed var(--line);border-radius:12px}
 .empty b{display:block;color:var(--ink);font:700 22px var(--display);margin-bottom:4px}
 
 /* Track */
-.track{display:grid;gap:16px;grid-template-columns:minmax(0,1fr)}
-@media (min-width:880px){.track{grid-template-columns:minmax(0,1fr) 340px;align-items:start}}
-.court-col{display:flex;flex-direction:column;gap:10px;min-width:0}
-.strip{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;padding:2px}
+#view-track{height:100%;position:relative}
+.track{height:100%;display:grid;gap:16px;grid-template-columns:minmax(0,1fr)}
+@media (min-width:880px){.track{grid-template-columns:minmax(0,1fr) 340px}}
+.court-col{display:flex;flex-direction:column;gap:8px;min-width:0;min-height:0;height:100%}
+.strip{flex:none;display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;padding:1px}
 .strip::-webkit-scrollbar{display:none}
-.chip{flex:none;min-height:42px;padding:0 15px;border-radius:999px;border:1.5px solid var(--line);background:var(--surface);color:var(--ink);font-weight:600;font-size:15px}
+.chip{flex:none;min-height:40px;padding:0 15px;border-radius:999px;border:1.5px solid var(--line);background:var(--surface);color:var(--ink);font-weight:600;font-size:15px}
 .chip[aria-pressed="true"]{background:var(--gold);border-color:var(--gold);color:var(--on-gold)}
 .chip.team{font-family:var(--display);font-weight:700;letter-spacing:.06em;text-transform:uppercase}
 .chip-add{border-style:dashed;color:var(--muted)}
-.court-head{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
-.hint{font-size:14px;color:var(--muted)}
-.hint b{color:var(--ink)}
 .seg{display:inline-flex;border:1.5px solid var(--line);border-radius:10px;overflow:hidden;background:var(--surface)}
 .seg button{border:0;background:transparent;min-height:38px;padding:0 14px;font-weight:600;font-size:14px;color:var(--muted)}
 .seg button[aria-pressed="true"]{background:var(--band);color:#fff}
-.court-wrap{position:relative;width:100%;max-width:calc((100vh - 270px) * 50 / 47);max-width:calc((100dvh - 270px) * 50 / 47);min-width:min(100%,320px);margin-inline:auto;aspect-ratio:50/47;border-radius:10px;overflow:hidden;box-shadow:0 0 0 1px var(--line);background:var(--court);touch-action:none;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none}
+.court-head{flex:none;display:flex;align-items:center;justify-content:space-between;gap:10px}
+.court-head .hint{font-size:14px;color:var(--muted);min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.court-head .hint b{color:var(--ink)}
+.court-head .seg button{min-height:34px;white-space:nowrap}
+@media (max-width:359px){.court-head .hint{display:none}.court-head{justify-content:flex-end}}
+.court-area{flex:1;min-height:120px;display:flex;align-items:center;justify-content:center}
+.court-wrap{position:relative;flex:none;border-radius:10px;overflow:hidden;box-shadow:0 0 0 1px var(--line);background:var(--court);touch-action:none;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none}
 #court{display:block;width:100%;height:100%;touch-action:none}
-.overlay{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;padding:14px;background:color-mix(in srgb,var(--bg) 72%,transparent);backdrop-filter:blur(2px);overflow:auto;touch-action:auto}
-.start{width:min(440px,100%);display:flex;flex-direction:column;gap:12px;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:18px;box-shadow:0 10px 30px rgba(10,20,40,.18)}
+.overlay{position:absolute;inset:0;z-index:4;display:flex;align-items:center;justify-content:center;padding:10px 0;background:var(--bg);overflow:auto;touch-action:auto}
+.start{width:min(460px,100%);display:flex;flex-direction:column;gap:11px;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px;box-shadow:0 10px 30px rgba(10,20,40,.14)}
 .start .grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.howto{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:6px;font-size:14.5px;line-height:1.35}
+.howto li{display:grid;grid-template-columns:22px 1fr;gap:6px;align-items:start}
+.howto .ic{width:22px;height:22px;border-radius:50%;display:grid;place-items:center;font-size:12px;font-weight:800;color:#fff;background:var(--band)}
+.howto .ic.mk{background:var(--make)} .howto .ic.ms{background:var(--miss)}
 .resume-list{display:flex;flex-direction:column;gap:6px}
-.move-banner{position:absolute;left:10px;right:10px;top:10px;display:flex;align-items:center;justify-content:space-between;gap:10px;background:var(--band);color:#fff;border-radius:10px;padding:8px 8px 8px 14px;font-weight:600;touch-action:auto}
-.actions{display:grid;grid-template-columns:repeat(auto-fit,minmax(104px,1fr));gap:8px;width:100%;margin-inline:auto}
-.act{min-height:54px;border-radius:12px;border:1.5px solid var(--line);background:var(--surface);font-weight:700;font-size:15px;display:flex;align-items:center;justify-content:center;gap:6px;line-height:1.1;padding:4px 8px;text-align:center}
-.act:disabled{opacity:.38;cursor:default}
-.act .mk{color:var(--make);font-size:19px}
-.act .ms{color:var(--miss);font-size:19px}
-.act.ft{background:var(--surface-2)}
+.move-banner{position:absolute;left:8px;right:8px;top:8px;display:flex;align-items:center;justify-content:space-between;gap:10px;background:var(--band);color:#fff;border-radius:10px;padding:6px 6px 6px 12px;font-weight:600;font-size:14px;touch-action:auto}
+.lastbar{flex:none;display:flex;align-items:center;gap:8px;width:100%;min-height:38px;padding:0 12px;border-radius:10px;border:1.5px solid var(--line);background:var(--surface);font-size:14px;text-align:left}
+.lastbar .z{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.lastbar .fix{color:var(--gold-ink);font-weight:700;white-space:nowrap}
+.livebar{flex:none;display:flex;flex-direction:column;gap:3px;padding:6px 10px 7px;border-radius:10px;background:var(--surface);border:1px solid var(--line);font-variant-numeric:tabular-nums}
+.livebar .who{font:700 14px/1 var(--display);letter-spacing:.07em;text-transform:uppercase;color:var(--gold-ink)}
+.lb-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:4px}
+.lb-grid div{display:flex;flex-direction:column;align-items:center;min-width:0;line-height:1.1}
+.lb-grid div + div{border-left:1px solid var(--line)}
+.lb-grid .k{font-size:11px;font-weight:600;letter-spacing:.07em;color:var(--muted)}
+.lb-grid b{font:700 21px/1.1 var(--display)}
+.lb-grid .s{font-size:12px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
+.ctrl{flex:none;display:flex;gap:8px;align-items:stretch}
+.ctrl .btn{min-height:42px;padding:0 12px;white-space:nowrap}
+.ctrl .seg button{white-space:nowrap}
+@media (max-width:389px){.ctrl{gap:6px}.ctrl .btn{padding:0 10px}.ctrl .seg button{padding:0 10px}}
+.ctrl .seg button{min-height:39px}
+.ctrl .grow{flex:1}
+.ftrow{flex:none;display:grid;grid-template-columns:auto minmax(0,1fr) minmax(0,1fr) auto;gap:8px;align-items:end;padding:8px 10px;border-radius:12px;background:var(--surface-2)}
+.ftrow .ft-l{font:700 15px/1.05 var(--display);letter-spacing:.05em;text-transform:uppercase;align-self:center}
+.ftrow label{display:flex;flex-direction:column;gap:2px;font-size:11.5px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.ftrow input{min-height:42px;text-align:center;font-weight:700;font-size:18px;padding:0 6px}
+.ftrow .btn{min-height:42px}
+.phone-only{}
+@media (min-width:880px){.phone-only{display:none!important}}
+@media (max-width:879px){.side{display:none!important}}
+@media (max-height:700px){.lastbar{display:none}}
 
-.side{display:flex;flex-direction:column;gap:12px;min-width:0}
+.side{display:flex;flex-direction:column;gap:12px;min-width:0;min-height:0;height:100%;overflow:auto;padding-bottom:8px}
 .ses-card{display:flex;flex-direction:column;gap:8px}
 .ses-title{font:700 24px/1.05 var(--display)}
 .tiles4{display:grid;grid-template-columns:1fr 1fr;gap:8px}
@@ -132,7 +173,7 @@ input[type=text],input[type=date],input[type=email],input[type=password],select{
 .log-row{display:grid;grid-template-columns:26px 38px minmax(0,1fr) auto;gap:8px;align-items:center;width:100%;text-align:left;background:transparent;border:0;border-top:1px solid var(--line);padding:9px 2px;font-size:14px}
 .log-row:first-child{border-top:0}
 .log-row .res{width:24px;height:24px;border-radius:50%;display:grid;place-items:center;font-weight:800;font-size:13px;color:#fff}
-.res.mk{background:var(--make)} .res.ms{background:var(--miss)}
+.res.mk{background:var(--make)} .res.ms{background:var(--miss)} .res.ft{background:var(--band);color:var(--gold);font-size:10px}
 .log-row .n{color:var(--muted);font-variant-numeric:tabular-nums}
 .log-row .z{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .log-row .w{color:var(--muted);font-size:13px;white-space:nowrap;max-width:110px;overflow:hidden;text-overflow:ellipsis}
@@ -197,12 +238,14 @@ table.t tr.tot td{font-weight:700;border-top:1.5px solid var(--ink)}
 .seg-big button.mk[aria-pressed="true"]{background:var(--make);border-color:var(--make);color:#fff}
 .seg-big button.ms[aria-pressed="true"]{background:var(--miss);border-color:var(--miss);color:#fff}
 .chips-wrap{display:flex;flex-wrap:wrap;gap:8px}
-.toast{position:fixed;left:50%;bottom:calc(18px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);z-index:40;background:var(--band);color:#fff;border:1.5px solid var(--gold);border-radius:999px;padding:10px 18px;font-weight:600;font-size:15px;max-width:calc(100% - 32px);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;box-shadow:0 8px 24px rgba(0,0,0,.25)}
+.toast{position:fixed;left:50%;bottom:calc(18px + env(safe-area-inset-bottom,0px));pointer-events:none;transform:translateX(-50%);z-index:40;background:var(--band);color:#fff;border:1.5px solid var(--gold);border-radius:999px;padding:10px 18px;font-weight:600;font-size:15px;max-width:calc(100% - 32px);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;box-shadow:0 8px 24px rgba(0,0,0,.25)}
+@media (max-width:699px){.toast{bottom:auto;top:calc(env(safe-area-inset-top,0px) + 58px)}}
 @media (prefers-reduced-motion:no-preference){.toast{animation:tin .18s ease-out}@keyframes tin{from{opacity:0;transform:translate(-50%,8px)}}}
 </style>
 
 </head>
 <body>
+<div id="app">
 <header class="band">
   <div class="band-in">
     <div class="brand"><b>PANTHERS</b><span>Shot Tracker</span></div>
@@ -216,37 +259,55 @@ table.t tr.tot td{font-weight:700;border-top:1.5px solid var(--ink)}
   </div>
 </header>
 
-<main>
+<main id="main" class="on-track">
   <section id="view-track">
     <div class="track">
       <div class="court-col">
         <div class="strip" id="strip" role="toolbar" aria-label="Shooter"></div>
         <div class="court-head">
-          <div class="hint"><b>Tap</b> = make · <b>Double-tap</b> = miss</div>
+          <div class="hint"><b>1 tap</b> make · <b>2 taps</b> miss</div>
           <div class="seg" role="group" aria-label="Court view">
             <button data-act="mode" data-v="marks" aria-pressed="true">Shots</button>
             <button data-act="mode" data-v="zones" aria-pressed="false">Zone %</button>
           </div>
         </div>
-        <div class="court-wrap" id="courtWrap">
-          <canvas id="court" aria-label="Half court. Tap once for a make, twice for a miss."></canvas>
-          <div id="courtOverlay"></div>
+        <div class="court-area" id="courtArea">
+          <div class="court-wrap" id="courtWrap">
+            <canvas id="court" aria-label="Half court. Tap once for a make, twice for a miss."></canvas>
+            <div id="moveBanner"></div>
+          </div>
         </div>
-        <div class="actions" id="actions">
-          <button class="act" data-act="undo" id="bUndo">↶ Undo</button>
-          <button class="act" data-act="same" data-v="1" id="bSameM"><span class="mk">✓</span>Same spot</button>
-          <button class="act" data-act="same" data-v="0" id="bSameX"><span class="ms">✕</span>Same spot</button>
-          <button class="act ft" data-act="ft" data-v="1" id="bFtM"><span class="mk">✓</span>Free throw</button>
-          <button class="act ft" data-act="ft" data-v="0" id="bFtX"><span class="ms">✕</span>Free throw</button>
+        <button class="lastbar phone-only" id="lastBar" data-act="edit-last" hidden></button>
+        <div class="livebar phone-only" id="liveBar"></div>
+        <div class="ctrl">
+          <button class="btn" data-act="undo" id="bUndo">↶ Undo</button>
+          <span class="grow"></span>
+          <button class="btn phone-only" data-act="log">Log</button>
+          <button class="btn btn-navy phone-only" data-act="end">End</button>
         </div>
+        <form class="ftrow" id="ftForm" autocomplete="off">
+          <span class="ft-l">Free<br>throws</span>
+          <label>Made<input type="number" id="ftMade" inputmode="numeric" pattern="[0-9]*" min="0" max="200" placeholder="0"></label>
+          <label>Missed<input type="number" id="ftMiss" inputmode="numeric" pattern="[0-9]*" min="0" max="200" placeholder="0"></label>
+          <button class="btn btn-gold" type="submit" id="ftAdd">Add</button>
+        </form>
       </div>
       <aside class="side" id="side"></aside>
     </div>
+    <div id="startOverlay"></div>
   </section>
   <section id="view-sessions" hidden></section>
   <section id="view-reports" hidden></section>
   <section id="view-roster" hidden></section>
 </main>
+
+<nav class="tabbar" aria-label="Sections">
+  <button data-act="nav" data-v="track" aria-current="page">Track</button>
+  <button data-act="nav" data-v="sessions">Sessions</button>
+  <button data-act="nav" data-v="reports">Reports</button>
+  <button data-act="nav" data-v="roster">Roster</button>
+</nav>
+</div>
 
 <div class="signin" id="signin" hidden>
   <form class="start" id="signinForm">
@@ -296,7 +357,9 @@ const ZONES = [
 ];
 const ZIDX = {}, ZBY = {};
 ZONES.forEach((z, i) => { ZIDX[z.id] = i; ZBY[z.id] = z; });
-const zoneName = s => s.ft ? 'Free throw' : (ZBY[s.z]?.name || 'Shot');
+const ftA = s => s.fa != null ? s.fa : 1;
+const ftM = s => s.fa != null ? s.fm : (s.m ? 1 : 0);
+const zoneName = s => s.ft ? (s.fa != null ? `Free throws ${s.fm}/${s.fa}` : 'Free throw') : (ZBY[s.z]?.name || 'Shot');
 
 function classify(x, y){
   const dx = x - BX, dy = y - BY, d = Math.hypot(dx, dy);
@@ -320,14 +383,14 @@ const pending = {};      // "kind/id" -> {dirty, inflight, err}
 const UI = {
   view:'track', activePlayer:null, courtMode:'marks',
   currentId: ls.get('pst_current', null),
-  pendingTap:null, editId:null, moveId:null, logAll:false,
+  pendingTap:null, editId:null, moveId:null,
   range:'latest', sel:new Set(), rPlayer:'all', playerPages:true
 };
 
 function setSync(){
   const el = $('#sync'); let s, t;
   if (S.mode === 'loading'){ s='loading'; t='Connecting…'; }
-  else if (S.mode === 'local'){ s='local'; t='Saved on this device only'; }
+  else if (S.mode === 'local'){ s='local'; t='Saved on this phone'; }
   else if (S.mode === 'signin'){ s='local'; t='Signed out'; }
   else {
     const q = Object.values(pending);
@@ -525,7 +588,7 @@ function stats(shots){
   const z = {}; ZONES.forEach(q => z[q.id] = {a:0, m:0});
   let a2=0, m2=0, a3=0, m3=0, fta=0, ftm=0;
   for (const s of shots){
-    if (s.ft){ fta++; if (s.m) ftm++; continue; }
+    if (s.ft){ fta += ftA(s); ftm += ftM(s); continue; }
     const zz = z[s.z]; if (!zz) continue;
     zz.a++; if (s.m) zz.m++;
     if (ZBY[s.z].pts === 3){ a3++; if (s.m) m3++; } else { a2++; if (s.m) m2++; }
@@ -604,7 +667,7 @@ function renderCourt(ctx, W, H, o){
   ctx.lineWidth = lw; ctx.strokeStyle = P.line; ctx.lineCap = 'butt';
   if (o.watermark){
     ctx.save(); ctx.globalAlpha = .1; ctx.fillStyle = P.line; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-    ctx.font = `800 3.4px ${DISP}`; ctx.fillText('PANTHERS', 25, 43.6); ctx.restore();
+    ctx.font = `800 3.4px ${DISP}`; ctx.fillText('PANTHERS', 25, 38.6); ctx.restore();
   }
   ctx.beginPath(); ctx.rect(lw/2, lw/2, 50 - lw, 47 - lw); ctx.stroke();
   ctx.beginPath(); ctx.rect(19, 0, 12, 19); ctx.stroke();
@@ -654,7 +717,7 @@ function renderCourt(ctx, W, H, o){
           ctx.lineCap = 'butt';
         }
       } else {
-        const rr = r * (a > 9 ? 1.55 : 1.35);
+        const rr = Math.max(r * (a > 9 ? 1.55 : 1.35), (a > 9 ? 14 : 12) * k);
         const fill = m === a ? P.make : m === 0 ? P.miss : P.gold;
         ctx.beginPath(); ctx.arc(x, y, rr, 0, 2 * Math.PI); ctx.fillStyle = fill; ctx.fill();
         ctx.lineWidth = 1.6 * k; ctx.strokeStyle = P.halo; ctx.stroke();
@@ -725,11 +788,12 @@ function sizeCanvas(cv, cssW, ratio){
 /* ---------- Tracking ---------- */
 function scopeShotsTrack(ses){ return UI.activePlayer ? ses.shots.filter(s => s.p === UI.activePlayer) : ses.shots; }
 function lastShot(ses){ return ses && ses.shots.length ? ses.shots[ses.shots.length - 1] : null; }
-function lastLoc(ses){ if (!ses) return null; for (let i = ses.shots.length - 1; i >= 0; i--){ if (!ses.shots[i].ft) return ses.shots[i]; } return null; }
 
 function drawTrackCourt(){
-  const wrap = $('#courtWrap'), cv = $('#court');
-  const cssW = wrap.clientWidth; if (!cssW) return;
+  const area = $('#courtArea'), wrap = $('#courtWrap'), cv = $('#court');
+  if (!area.clientWidth || !area.clientHeight) return;
+  const cssW = Math.max(120, Math.floor(Math.min(area.clientWidth, area.clientHeight * 50 / 47)));
+  wrap.style.width = cssW + 'px'; wrap.style.height = (cssW * 47 / 50) + 'px';
   const {W, H, dpr} = sizeCanvas(cv, cssW, 47 / 50);
   const ses = currentSession();
   const shots = ses ? scopeShotsTrack(ses).filter(s => !s.ft) : [];
@@ -750,14 +814,14 @@ function addShot(pt, make){
   toast((make ? '✓ Make' : '✕ Miss') + ' · ' + ZBY[sh.z].name + ' · ' + pname(sh.p));
   renderTrack();
 }
-function addFT(make){
-  const ses = currentSession(); if (!ses) return;
-  const sh = {i:uid('h'), ft:1, m:make ? 1 : 0, p:UI.activePlayer || null, t:Date.now()};
+function addFTEntry(made, missed){
+  const ses = currentSession(); if (!ses) return false;
+  const sh = {i:uid('h'), ft:1, fm:made, fa:made + missed, p:UI.activePlayer || null, t:Date.now()};
   ses.shots.push(sh); touch(ses);
-  toast((make ? '✓ FT make' : '✕ FT miss') + ' · ' + pname(sh.p));
-  renderTrack();
+  toast('Free throws ' + made + '/' + (made + missed) + ' · ' + pname(sh.p));
+  renderTrack(); return true;
 }
-function sameSpot(make){ const l = lastLoc(currentSession()); if (l) addShot({x:l.x, y:l.y}, make); }
+const readCount = el => { const v = String(el.value || '').trim(); if (v === '') return 0; const n = Number(v); return Number.isInteger(n) && n >= 0 && n <= 200 ? n : NaN; };
 function undo(){
   const ses = currentSession(); if (!ses || !ses.shots.length) return;
   const sh = ses.shots.pop(); touch(ses);
@@ -796,6 +860,32 @@ canvas.addEventListener('pointerup', e => {
   UI.pendingTap = tap; drawTrackCourt();
 });
 
+function shotCount(shots){ return shots.reduce((n, s) => n + (s.ft ? ftA(s) : 1), 0); }
+function logRow(s, n){
+  const ft = s.ft && s.fa != null;
+  const res = ft ? '<span class="res ft">FT</span>' : `<span class="res ${s.m ? 'mk' : 'ms'}">${s.m ? '✓' : '✕'}</span>`;
+  return `<button class="log-row ${UI.editId === s.i ? 'sel' : ''}" data-act="edit" data-v="${esc(s.i)}">${res}<span class="n">#${n}</span><span class="z">${esc(zoneName(s))}</span><span class="w">${esc(pname(s.p))}</span></button>`;
+}
+function startOverlayHTML(){
+  const open = sortedSessions().filter(s => s.status === 'open').reverse();
+  return `<div class="overlay"><form class="start" id="startForm">
+    <h2>Start a session</h2>
+    <ul class="howto">
+      <li><span class="ic">P</span><span>Pick <b>Team</b> or a player above the court. Shots go to whoever is highlighted.</span></li>
+      <li><span class="ic mk">✓</span><span><b>Tap once</b> where the shot was taken for a make.</span></li>
+      <li><span class="ic ms">✕</span><span><b>Tap twice quickly</b> for a miss. Shots from one spot stack up and show makes/attempts.</span></li>
+      <li><span class="ic">FT</span><span>For <b>free throws</b>, type how many were made and missed, then tap Add.</span></li>
+      <li><span class="ic">↶</span><span><b>Undo</b> removes the last shot. Tap <b>Last shot</b> or <b>Log</b> to change make or miss, the shooter, or the spot.</span></li>
+    </ul>
+    <label class="f">Session name<input type="text" id="sName" value="Practice" maxlength="60"></label>
+    <div class="grid2">
+      <label class="f">Date<input type="date" id="sDate" value="${todayISO()}"></label>
+      <label class="f">Drill<select id="sTag">${DRILLS.map(d => `<option>${d}</option>`).join('')}</select></label>
+    </div>
+    <button class="btn btn-gold" type="submit" ${S.loaded ? '' : 'disabled'}>${S.loaded ? 'Start session' : 'Connecting…'}</button>
+    ${open.length ? `<div class="resume-list"><h3>Or continue</h3>${open.slice(0, 3).map(s => `<button type="button" class="btn btn-sm" data-act="resume" data-v="${esc(s.id)}">${esc(fmtDate(s.date))} · ${esc(s.name)} · ${shotCount(s.shots)} shots</button>`).join('')}</div>` : ''}
+  </form></div>`;
+}
 function renderTrack(){
   const ses = currentSession();
   const players = activePlayers();
@@ -805,43 +895,45 @@ function renderTrack(){
     `<button class="chip team" data-act="player" data-v="" aria-pressed="${!UI.activePlayer}">Team</button>` +
     players.map(p => `<button class="chip" data-act="player" data-v="${esc(p.id)}" aria-pressed="${UI.activePlayer === p.id}">${esc(p.name)}</button>`).join('') +
     (players.length ? '' : `<button class="chip chip-add" data-act="nav" data-v="roster">+ Add players</button>`);
-
   document.querySelectorAll('[data-act="mode"]').forEach(b => b.setAttribute('aria-pressed', b.dataset.v === UI.courtMode));
 
-  const ov = $('#courtOverlay');
+  const ov = $('#startOverlay');
   if (!ses){
-    const open = sortedSessions().filter(s => s.status === 'open').reverse();
-    ov.innerHTML = `<div class="overlay"><form class="start" id="startForm">
-      <h2>Start a session</h2>
-      <label class="f">Session name<input type="text" id="sName" value="Practice" maxlength="60"></label>
-      <div class="grid2">
-        <label class="f">Date<input type="date" id="sDate" value="${todayISO()}"></label>
-        <label class="f">Drill<select id="sTag">${DRILLS.map(d => `<option>${d}</option>`).join('')}</select></label>
-      </div>
-      <button class="btn btn-gold" type="submit" ${S.loaded ? '' : 'disabled'}>${S.loaded ? 'Start session' : 'Connecting…'}</button>
-      ${open.length ? `<div class="resume-list"><h3>Or resume</h3>${open.map(s => `<button type="button" class="btn btn-sm" data-act="resume" data-v="${esc(s.id)}">${esc(fmtDate(s.date))} · ${esc(s.name)} · ${s.shots.length} shots</button>`).join('')}</div>` : ''}
-    </form></div>`;
-  } else if (UI.moveId){
+    const key = S.loaded + '|' + sortedSessions().filter(s => s.status === 'open').map(s => s.id).join(',');
+    if (!$('#startForm') || ov.dataset.k !== key){ ov.innerHTML = startOverlayHTML(); ov.dataset.k = key; }
+  } else { ov.innerHTML = ''; ov.dataset.k = ''; }
+  if (ses && UI.moveId){
     const n = ses.shots.findIndex(s => s.i === UI.moveId) + 1;
-    ov.innerHTML = `<div class="move-banner"><span>Tap the new spot for shot #${n}</span><button class="btn btn-sm btn-gold" data-act="move-cancel">Cancel</button></div>`;
-  } else ov.innerHTML = '';
+    $('#moveBanner').innerHTML = `<div class="move-banner"><span>Tap the new spot for shot #${n}</span><button class="btn btn-sm btn-gold" data-act="move-cancel">Cancel</button></div>`;
+  } else $('#moveBanner').innerHTML = '';
 
-  const hasShots = ses && ses.shots.length, loc = lastLoc(ses);
-  $('#bUndo').disabled = !hasShots;
-  $('#bSameM').disabled = $('#bSameX').disabled = !loc;
-  $('#bFtM').disabled = $('#bFtX').disabled = !ses;
+  $('#bUndo').disabled = !(ses && ses.shots.length);
+  ['#ftMade', '#ftMiss', '#ftAdd'].forEach(k => $(k).disabled = !ses);
+
+  const scope = ses ? scopeShotsTrack(ses) : [], st = stats(scope);
+  const last = ses ? lastShot(ses) : null;
+  const lb = $('#lastBar');
+  if (last){
+    const mark = last.ft && last.fa != null ? '<span class="res ft" style="width:24px;height:24px;border-radius:50%;display:inline-grid;place-items:center;font-weight:800">FT</span>'
+      : `<span class="res ${last.m ? 'mk' : 'ms'}" style="width:24px;height:24px;border-radius:50%;display:inline-grid;place-items:center;font-weight:800;font-size:13px;color:#fff">${last.m ? '✓' : '✕'}</span>`;
+    lb.innerHTML = `<span class="muted">Last shot</span>${mark}<span class="z">${esc(zoneName(last))} · ${esc(pname(last.p))}</span><span class="fix">Fix ›</span>`;
+    lb.hidden = false;
+  } else lb.hidden = true;
+  $('#liveBar').innerHTML = ses
+    ? `<div class="who">${esc(pname(UI.activePlayer))}</div><div class="lb-grid">
+        <div><span class="k">FG</span><b>${pct(st.fgm, st.fga)}</b><span class="s">${st.fgm}/${st.fga}</span></div>
+        <div><span class="k">2PT</span><b>${pct(st.m2, st.a2)}</b><span class="s">${st.m2}/${st.a2}</span></div>
+        <div><span class="k">3PT</span><b>${pct(st.m3, st.a3)}</b><span class="s">${st.m3}/${st.a3}</span></div>
+        <div><span class="k">FT</span><b>${pct(st.ftm, st.fta)}</b><span class="s">${st.ftm}/${st.fta}</span></div>
+        <div><span class="k">eFG</span><b>${pctN(st.efg)}</b><span class="s">${st.pps == null ? '—' : st.pps.toFixed(2) + '/shot'}</span></div></div>`
+    : '<span class="muted">Start a session to see live stats.</span>';
 
   const side = $('#side');
-  if (!ses){
-    const recent = sortedSessions().reverse().slice(0, 3);
-    side.innerHTML = `<div class="card"><h3>How it works</h3>
-      <p style="margin:.5em 0 0">Pick <b>Team</b> or a player above the court, then tap where the shot was taken. One tap logs a make. Two quick taps log a miss.</p>
-      <p style="margin:.6em 0 0" class="muted">Stack shots from one spot with the Same spot buttons. Tap any shot in the list to change it.</p></div>
-      ${recent.length ? `<div class="card"><h3>Recent sessions</h3><div class="log" style="margin-top:6px">${recent.map(s => { const st = stats(s.shots); return `<button class="log-row" style="grid-template-columns:minmax(0,1fr) auto" data-act="report" data-v="${esc(s.id)}"><span class="z">${esc(fmtDate(s.date))} · ${esc(s.name)}</span><span class="w num">${st.fgm}/${st.fga} · ${pct(st.fgm, st.fga)}</span></button>`; }).join('')}</div></div>` : ''}`;
-  } else {
-    const scope = scopeShotsTrack(ses), st = stats(scope), all = stats(ses.shots);
+  if (!ses){ side.innerHTML = ''; }
+  else {
+    const all = stats(ses.shots);
     const nums = {}; ses.shots.forEach((s, i) => nums[s.i] = i + 1);
-    const list = ses.shots.slice().reverse(), shown = UI.logAll ? list : list.slice(0, 10);
+    const list = ses.shots.slice().reverse();
     const byP = {};
     ses.shots.forEach(s => { if (s.ft) return; const k = s.p || ''; (byP[k] = byP[k] || {a:0, m:0}); byP[k].a++; if (s.m) byP[k].m++; });
     const prow = Object.keys(byP).sort((a, b) => byP[b].a - byP[a].a);
@@ -849,7 +941,7 @@ function renderTrack(){
       <div class="card ses-card">
         <div class="row" style="justify-content:space-between"><h3>${esc(fmtDate(ses.date))}</h3><span class="pill">${esc(ses.tag || 'Practice')}</span></div>
         <div class="ses-title">${esc(ses.name)}</div>
-        <div class="muted num">${ses.shots.length} shots logged · ${all.fgm}/${all.fga} FG team</div>
+        <div class="muted num">${shotCount(ses.shots)} shots · ${all.fgm}/${all.fga} FG team</div>
         <button class="btn btn-navy" data-act="end">End session</button>
       </div>
       <div class="card">
@@ -865,11 +957,8 @@ function renderTrack(){
       <div class="card">
         <div class="row" style="justify-content:space-between"><h3>Shot log</h3><span class="muted" style="font-size:13px">Tap a shot to fix it</span></div>
         <div class="log" style="margin-top:4px">
-          ${shown.length ? shown.map(s => `<button class="log-row ${UI.editId === s.i ? 'sel' : ''}" data-act="edit" data-v="${esc(s.i)}">
-            <span class="res ${s.m ? 'mk' : 'ms'}">${s.m ? '✓' : '✕'}</span><span class="n">#${nums[s.i]}</span><span class="z">${esc(zoneName(s))}</span><span class="w">${esc(pname(s.p))}</span></button>`).join('')
-            : `<p class="muted" style="margin:8px 0 2px">No shots yet. Tap the court to log the first one.</p>`}
+          ${list.length ? list.map(s => logRow(s, nums[s.i])).join('') : `<p class="muted" style="margin:8px 0 2px">No shots yet. Tap the court to log the first one.</p>`}
         </div>
-        ${list.length > 10 ? `<button class="btn btn-sm btn-ghost" style="margin-top:8px;width:100%" data-act="log-all">${UI.logAll ? 'Show recent only' : 'Show all ' + list.length + ' shots'}</button>` : ''}
       </div>`;
   }
   drawTrackCourt();
@@ -880,6 +969,14 @@ function openSheet(html){ $('#sheetBody').innerHTML = html; $('#sheet').hidden =
 function closeSheet(){ $('#sheet').hidden = true; if (UI.editId){ UI.editId = null; if (UI.view === 'track') renderTrack(); } }
 $('#sheet').addEventListener('click', e => { if (e.target.id === 'sheet') closeSheet(); });
 
+function logSheet(){
+  const ses = currentSession(); if (!ses) return;
+  const nums = {}; ses.shots.forEach((s, i) => nums[s.i] = i + 1);
+  const list = ses.shots.slice().reverse();
+  openSheet(`<div class="row" style="justify-content:space-between"><h2>Shot log</h2><button class="btn btn-sm btn-gold" data-act="sheet-close">Done</button></div>
+    <p class="muted" style="margin:0">${shotCount(ses.shots)} shots this session. Tap one to fix it.</p>
+    <div class="log">${list.length ? list.map(s => logRow(s, nums[s.i])).join('') : '<p class="muted">No shots yet.</p>'}</div>`);
+}
 function editSheet(){
   const ses = currentSession(); if (!ses) return closeSheet();
   const idx = ses.shots.findIndex(s => s.i === UI.editId); if (idx < 0) return closeSheet();
@@ -887,18 +984,21 @@ function editSheet(){
   const opts = activePlayers();
   if (sh.p && !opts.some(p => p.id === sh.p)) opts.push({id:sh.p, name:pname(sh.p)});
   const time = new Date(sh.t).toLocaleTimeString('en-US', {hour:'numeric', minute:'2-digit'});
-  openSheet(`<div><h3>Shot #${idx + 1} · ${esc(time)}</h3><h2 style="margin-top:4px">${esc(zoneName(sh))}${sh.ft ? '' : ` · ${ZBY[sh.z].pts} pts`}</h2></div>
-    <div class="seg-big">
+  const ftEntry = sh.ft && sh.fa != null;
+  openSheet(`<div><h3>Shot #${idx + 1} · ${esc(time)}</h3><h2 style="margin-top:4px">${esc(ftEntry ? 'Free throws' : zoneName(sh))}${sh.ft ? '' : ` · ${ZBY[sh.z].pts} pts`}</h2></div>
+    ${ftEntry ? `<div class="ftrow" style="grid-template-columns:minmax(0,1fr) minmax(0,1fr)">
+      <label>Made<input type="number" id="eFtMade" inputmode="numeric" pattern="[0-9]*" min="0" max="200" value="${sh.fm}"></label>
+      <label>Missed<input type="number" id="eFtMiss" inputmode="numeric" pattern="[0-9]*" min="0" max="200" value="${sh.fa - sh.fm}"></label></div>` : `<div class="seg-big">
       <button class="mk" data-act="shot-res" data-v="1" aria-pressed="${!!sh.m}">✓ Make</button>
       <button class="ms" data-act="shot-res" data-v="0" aria-pressed="${!sh.m}">✕ Miss</button>
-    </div>
+    </div>`}
     <div><h3 style="margin-bottom:8px">Shooter</h3><div class="chips-wrap">
       <button class="chip team" data-act="shot-player" data-v="" aria-pressed="${!sh.p}">Team</button>
       ${opts.map(p => `<button class="chip" data-act="shot-player" data-v="${esc(p.id)}" aria-pressed="${sh.p === p.id}">${esc(p.name)}</button>`).join('')}
     </div></div>
     <div class="row">
       ${sh.ft ? '' : `<button class="btn" data-act="shot-move">Move to a new spot</button>`}
-      <button class="btn btn-danger" data-act="shot-del">Delete shot</button>
+      <button class="btn btn-danger" data-act="shot-del">${ftEntry ? 'Delete entry' : 'Delete shot'}</button>
       <button class="btn btn-gold" style="margin-left:auto" data-act="sheet-close">Done</button>
     </div>`);
 }
@@ -1199,7 +1299,7 @@ async function downloadCSV(){
   const q = v => { v = String(v ?? ''); return /[",\n]/.test(v) ? '"' + v.replace(/"/g, '""') + '"' : v; };
   const lines = [['Date','Session','Drill','Player','Shot type','Zone','Points','Result','X (ft from left sideline)','Y (ft from baseline)','Time'].join(',')];
   sessions.forEach(s => filterScope(s.shots, UI.rPlayer).forEach(sh => {
-    lines.push([s.date, s.name, s.tag || '', pname(sh.p), sh.ft ? 'Free throw' : 'Field goal', zoneName(sh), sh.ft ? 1 : ZBY[sh.z].pts, sh.m ? 'Make' : 'Miss',
+    lines.push([s.date, s.name, s.tag || '', pname(sh.p), sh.ft ? 'Free throws' : 'Field goal', sh.ft ? 'Free throw line' : zoneName(sh), sh.ft ? 1 : ZBY[sh.z].pts, sh.ft ? ftM(sh) + ' made of ' + ftA(sh) : (sh.m ? 'Make' : 'Miss'),
       sh.ft ? '' : sh.x, sh.ft ? '' : sh.y, new Date(sh.t).toLocaleTimeString('en-US', {hour:'numeric', minute:'2-digit'})].map(q).join(','));
   }));
   try { await DL.save({filename:`panthers-shots-${todayISO()}.csv`, data:lines.join('\n')}); toast('Spreadsheet saved'); }
@@ -1209,7 +1309,7 @@ async function downloadCSV(){
 /* ---------- Roster ---------- */
 function renderRoster(){
   const act = activePlayers(), gone = Object.values(S.players).filter(p => p.active === false).sort((a, b) => a.name.localeCompare(b.name));
-  const counts = {}; Object.values(S.sessions).forEach(s => s.shots && s.shots.forEach(sh => { if (sh.p) counts[sh.p] = (counts[sh.p] || 0) + 1; }));
+  const counts = {}; Object.values(S.sessions).forEach(s => s.shots && s.shots.forEach(sh => { if (sh.p) counts[sh.p] = (counts[sh.p] || 0) + (sh.ft ? ftA(sh) : 1); }));
   $('#view-roster').innerHTML = `<div class="roster">
     <div class="view-head" style="margin:0"><div><h1>Roster</h1><div class="muted">${act.length} of ${MAX_PLAYERS} players</div></div></div>
     <form class="card add-form" id="addPlayer"><input type="text" id="pName" maxlength="30" placeholder="Player name" autocomplete="off" ${act.length >= MAX_PLAYERS ? 'disabled' : ''}>
@@ -1225,7 +1325,8 @@ function renderRoster(){
 
 /* ---------- App shell ---------- */
 function render(){
-  document.querySelectorAll('.tab').forEach(t => { if (t.dataset.v === UI.view) t.setAttribute('aria-current', 'page'); else t.removeAttribute('aria-current'); });
+  document.querySelectorAll('.tab, .tabbar button').forEach(t => { if (t.dataset.v === UI.view) t.setAttribute('aria-current', 'page'); else t.removeAttribute('aria-current'); });
+  $('#main').classList.toggle('on-track', UI.view === 'track');
   ['track','sessions','reports','roster'].forEach(v => $('#view-' + v).hidden = v !== UI.view);
   if (UI.view === 'track') renderTrack();
   else if (UI.view === 'sessions') renderSessions();
@@ -1242,17 +1343,16 @@ document.addEventListener('click', e => {
   const b = e.target.closest('[data-act]'); if (!b || b.disabled) return;
   const v = b.dataset.v;
   switch (b.dataset.act){
-    case 'nav': UI.view = v; closeSheet(); render(); window.scrollTo(0, 0); break;
+    case 'nav': UI.view = v; closeSheet(); render(); $('#main').scrollTop = 0; break;
     case 'player': UI.activePlayer = v || null; renderTrack(); break;
     case 'mode': UI.courtMode = v; renderTrack(); break;
     case 'undo': undo(); break;
-    case 'same': sameSpot(v === '1'); break;
-    case 'ft': addFT(v === '1'); break;
-    case 'log-all': UI.logAll = !UI.logAll; renderTrack(); break;
+    case 'log': logSheet(); break;
+    case 'edit-last': { const l = lastShot(currentSession()); if (l){ UI.editId = l.i; renderTrack(); editSheet(); } break; }
     case 'resume': { const s = S.sessions[v]; if (!s) break; if (s.status !== 'open'){ s.status = 'open'; delete s.endedAt; touch(s); } setCurrent(v); UI.view = 'track'; closeSheet(); render(); break; }
     case 'end': {
       const s = currentSession(); if (!s) break; const st = stats(s.shots);
-      openSheet(`<h2>End this session?</h2><p class="muted" style="margin:0">${esc(s.name)} · ${s.shots.length} shots · ${st.fgm}/${st.fga} FG. You can resume it later from Sessions.</p>
+      openSheet(`<h2>End this session?</h2><p class="muted" style="margin:0">${esc(s.name)} · ${shotCount(s.shots)} shots · ${st.fgm}/${st.fga} FG. You can resume it later from Sessions.</p>
         <div class="row"><button class="btn btn-gold" data-act="end-confirm" data-v="report">End and view report</button><button class="btn" data-act="end-confirm">End session</button><button class="btn btn-ghost" data-act="sheet-close">Keep tracking</button></div>`);
       break; }
     case 'end-confirm': {
@@ -1270,9 +1370,9 @@ document.addEventListener('click', e => {
       if (i >= 0){ const sh = s.shots.splice(i, 1)[0]; touch(s); toast('Deleted shot #' + (i + 1) + ' · ' + zoneName(sh)); }
       closeSheet(); renderTrack(); break; }
     case 'sheet-close': closeSheet(); break;
-    case 'report': UI.sel = new Set([v]); UI.range = 'custom'; UI.view = 'reports'; render(); window.scrollTo(0, 0); break;
+    case 'report': UI.sel = new Set([v]); UI.range = 'custom'; UI.view = 'reports'; render(); $('#main').scrollTop = 0; break;
     case 'sel-all': { const ids = sortedSessions().map(s => s.id); UI.sel = UI.sel.size === ids.length ? new Set() : new Set(ids); renderSessions(); break; }
-    case 'report-sel': UI.range = 'custom'; UI.view = 'reports'; render(); window.scrollTo(0, 0); break;
+    case 'report-sel': UI.range = 'custom'; UI.view = 'reports'; render(); $('#main').scrollTop = 0; break;
     case 'rename': {
       const s = S.sessions[v]; if (!s) break;
       openSheet(`<form id="renameForm" data-id="${esc(s.id)}" style="display:flex;flex-direction:column;gap:12px"><h2>Edit session</h2>
@@ -1283,7 +1383,7 @@ document.addEventListener('click', e => {
       break; }
     case 'del': {
       const s = S.sessions[v]; if (!s) break;
-      openSheet(`<h2>Delete ${esc(s.name)}?</h2><p class="muted" style="margin:0">${esc(fmtDate(s.date))} · ${s.shots.length} shots. This removes the session and its shots from every report. It cannot be undone.</p>
+      openSheet(`<h2>Delete ${esc(s.name)}?</h2><p class="muted" style="margin:0">${esc(fmtDate(s.date))} · ${shotCount(s.shots)} shots. This removes the session and its shots from every report. It cannot be undone.</p>
         <div class="row"><button class="btn btn-danger" data-act="del-confirm" data-v="${esc(s.id)}">Delete session</button><button class="btn btn-ghost" data-act="sheet-close">Cancel</button></div>`);
       break; }
     case 'del-confirm': { delete S.sessions[v]; UI.sel.delete(v); if (UI.currentId === v) setCurrent(null); save('sessions', v); closeSheet(); toast('Session deleted'); render(); break; }
@@ -1318,6 +1418,12 @@ document.addEventListener('change', e => {
   else if (t.id === 'rPlayer'){ UI.rPlayer = t.value; renderReports(); }
   else if (t.id === 'pPages'){ UI.playerPages = t.checked; }
   else if (t.id === 'importFile' && t.files && t.files[0]){ importBackup(t.files[0]); t.value = ''; }
+  else if (t.id === 'eFtMade' || t.id === 'eFtMiss'){
+    const mk = readCount($('#eFtMade')), ms = readCount($('#eFtMiss'));
+    if (isNaN(mk) || isNaN(ms) || mk + ms === 0){ toast('Enter whole numbers, with at least one free throw.'); return; }
+    const ses = currentSession(); const sh = ses && ses.shots.find(s => s.i === UI.editId);
+    if (sh){ sh.fm = mk; sh.fa = mk + ms; touch(ses); renderTrack(); toast('Updated to ' + mk + '/' + (mk + ms)); }
+  }
 });
 document.addEventListener('submit', e => {
   e.preventDefault();
@@ -1329,11 +1435,18 @@ document.addEventListener('submit', e => {
       .finally(() => { btn.disabled = false; btn.textContent = 'Sign in'; });
     return;
   }
+  if (f.id === 'ftForm'){
+    const mk = readCount($('#ftMade')), ms = readCount($('#ftMiss'));
+    if (isNaN(mk) || isNaN(ms)){ toast('Enter whole numbers for made and missed.'); return; }
+    if (mk + ms === 0){ toast('Enter at least one made or missed free throw.'); return; }
+    if (addFTEntry(mk, ms)){ $('#ftMade').value = ''; $('#ftMiss').value = ''; document.activeElement && document.activeElement.blur && document.activeElement.blur(); }
+    return;
+  }
   if (f.id === 'startForm'){
     if (!S.loaded) return;
     const id = uid('s');
     S.sessions[id] = {id, name:($('#sName').value.trim() || 'Practice'), date:($('#sDate').value || todayISO()), tag:$('#sTag').value, status:'open', createdAt:Date.now(), updatedAt:Date.now(), shots:[]};
-    save('sessions', id); setCurrent(id); UI.logAll = false; renderTrack();
+    save('sessions', id); setCurrent(id); renderTrack();
   } else if (f.id === 'addPlayer'){
     const name = $('#pName').value.trim().replace(/\s+/g, ' ');
     if (!name) return;

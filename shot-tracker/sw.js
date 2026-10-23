@@ -1,5 +1,5 @@
 // Keeps the tracker working in gyms with weak or no signal.
-const CACHE = 'pst-v2';
+const CACHE = 'pst-v8';
 const CORE = ['./', './index.html', './manifest.webmanifest', './icon-192.png', './icon-512.png', './apple-touch-icon.png'];
 const CDN = /^(https:\/\/(www\.gstatic\.com\/firebasejs|cdnjs\.cloudflare\.com|fonts\.googleapis\.com|fonts\.gstatic\.com))/;
 
